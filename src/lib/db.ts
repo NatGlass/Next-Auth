@@ -1,11 +1,14 @@
-import {connect} from '@planetscale/database';
-import {drizzle} from 'drizzle-orm/planetscale-serverless';
+import {PrismaClient} from '@prisma/client';
 
-const connection = connect({
-  host: process.env.DATABASE_HOST,
-  username: process.env.DATABASE_USERNAME,
-  password: process.env.DATABASE_PASSWORD,
-});
+const prismaClientSingleton = () => new PrismaClient();
 
-// eslint-disable-next-line import/prefer-default-export
-export const db = drizzle(connection);
+declare global {
+  // eslint-disable-next-line vars-on-top, no-var
+  var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
+}
+
+const prisma = globalThis.prisma ?? prismaClientSingleton();
+
+export default prisma;
+
+if (process.env.NODE_ENV !== 'production') globalThis.prisma = prisma;
