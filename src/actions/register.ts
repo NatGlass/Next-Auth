@@ -1,8 +1,9 @@
 'use server';
 
-import {createUser, getUserByEmail} from '@/lib/data';
+import {getUserByEmail} from '@/data/user';
 import {RegisterSchema, RegisterSchemaType} from '@/schemas';
 import bcrypt from 'bcrypt';
+import prisma from '../lib/db';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function register(values: RegisterSchemaType) {
@@ -22,7 +23,13 @@ export async function register(values: RegisterSchemaType) {
     return {error: 'Email is already associated with an account'};
   }
 
-  await createUser(name, email, hashedPassword);
+  await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+    },
+  });
 
   return {success: 'Verification email sent'};
 }
