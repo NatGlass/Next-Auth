@@ -1,5 +1,5 @@
 {
-  "name": "next-template",
+  "name": "next-auth",
   "version": "0.1.0",
   "prettier": "prettier-airbnb-config",
   "private": true,
