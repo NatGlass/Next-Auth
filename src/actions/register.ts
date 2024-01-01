@@ -2,7 +2,7 @@
 
 import {getUserByEmail} from '@/data/user';
 import {RegisterSchema, RegisterSchemaType} from '@/schemas';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import prisma from '../lib/db';
 
 // eslint-disable-next-line import/prefer-default-export
