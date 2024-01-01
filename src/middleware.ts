@@ -1,5 +1,9 @@
-import {auth} from './auth';
-import {DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, authRoutes, publicRoutes} from './routes';
+import NextAuth from 'next-auth';
+
+import authConfig from '../auth.config';
+import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, authRoutes, publicRoutes } from '../routes';
+
+const {auth} = NextAuth(authConfig);
 
 export default auth(req => {
   const {nextUrl} = req;
@@ -11,12 +15,10 @@ export default auth(req => {
 
   // The order of these checks is important
 
-  // Don't do anything on api auth route
   if (isApiAuthRoute) {
     return null;
   }
 
-  // Do nothing unless the user is logged in, then redirect to the default login page
   if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
@@ -24,18 +26,14 @@ export default auth(req => {
     return null;
   }
 
-  // Redirect to login page if the user isn't logged in and the route isn't public
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL('/auth/login', nextUrl));
+    return Response.redirect(new URL("/auth/login", nextUrl))
   }
 
   return null;
 });
 
-// Apply middleware to URLs that:
-// 1. Don't end in a file extension and aren't part of Next.js's '_next' routing
-// 2. Match the root URL ('/')
-// 3. Start with '/api' or '/trpc', followed by any characters
+// Optionally, don't invoke Middleware on some paths
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
