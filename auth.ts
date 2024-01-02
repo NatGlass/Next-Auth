@@ -10,8 +10,13 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: '/auth/login',
+    error: '/auth/error',
+    newUser: '/auth/new-user',
+  },
   events: {
-    // if the user signs up with a social account, we already know their email is verified 
+    // if the user signs up with a social account, we already know their email is verified
     async linkAccount({user}) {
       await prisma.user.update({
         where: {id: user.id},
