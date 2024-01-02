@@ -5,6 +5,7 @@ import {generateVerificationToken} from '@/lib/tokens';
 import {RegisterSchema, RegisterSchemaType} from '@/schemas';
 import bcrypt from 'bcryptjs';
 import prisma from '../lib/db';
+import { sendVerificationEmail } from '@/lib/email';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function register(values: RegisterSchemaType) {
@@ -33,6 +34,8 @@ export async function register(values: RegisterSchemaType) {
   });
 
   const verificationToken = await generateVerificationToken(email);
+
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
   return {success: 'Verification email sent'};
 }

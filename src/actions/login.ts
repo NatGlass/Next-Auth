@@ -2,6 +2,7 @@
 
 import {signIn} from '@/../auth';
 import {getUserByEmail} from '@/data/user';
+import {sendVerificationEmail} from '@/lib/email';
 import {generateVerificationToken} from '@/lib/tokens';
 import {LoginSchema, LoginSchemaType} from '@/schemas';
 import {AuthError} from 'next-auth';
@@ -25,6 +26,8 @@ export async function login(values: LoginSchemaType) {
 
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(email);
+
+    await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
     return {success: 'Verification email sent'};
   }
