@@ -1,6 +1,7 @@
 'use server';
 
 import {getUserByEmail} from '@/data/user';
+import {generateVerificationToken} from '@/lib/tokens';
 import {RegisterSchema, RegisterSchemaType} from '@/schemas';
 import bcrypt from 'bcryptjs';
 import prisma from '../lib/db';
@@ -30,6 +31,8 @@ export async function register(values: RegisterSchemaType) {
       password: hashedPassword,
     },
   });
+
+  const verificationToken = await generateVerificationToken(email);
 
   return {success: 'Verification email sent'};
 }
