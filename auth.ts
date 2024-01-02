@@ -25,14 +25,17 @@ export const {
     },
   },
   callbacks: {
-    // async signIn({user}) {
-    //   const existingUser = await getUserById(user.id);
+    async signIn({ user, account }) {
+      // Allow OAuth sign in without email verification
 
-    //   // Disallow sign in if the user has not verified their email address
-    //   if (!existingUser || !existingUser.emailVerified) return false;
+      if (account?.provider !== "Credentials") return true;
 
-    //   return true;
-    // },
+      const existingUser = await getUserById(user.id);
+
+      if (!existingUser?.emailVerified) return false;
+
+      return true;
+    },
     async session({session, token}) {
       if (token.sub && session.user) {
         // eslint-disable-next-line no-param-reassign
