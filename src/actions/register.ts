@@ -1,11 +1,11 @@
 'use server';
 
 import {getUserByEmail} from '@/data/user';
+import {sendVerificationEmail} from '@/lib/email';
 import {generateVerificationToken} from '@/lib/tokens';
 import {RegisterSchema, RegisterSchemaType} from '@/schemas';
 import bcrypt from 'bcryptjs';
 import prisma from '../lib/db';
-import { sendVerificationEmail } from '@/lib/email';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function register(values: RegisterSchemaType) {
