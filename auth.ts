@@ -1,3 +1,4 @@
+import {getTwoFactorConfirmationByUserId} from '@/data/two-factor-confirmation';
 import {getUserById} from '@/data/user';
 import prisma from '@/lib/db';
 import {PrismaAdapter} from '@auth/prisma-adapter';
@@ -25,14 +26,26 @@ export const {
     },
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({user, account}) {
       // Allow OAuth sign in without email verification
 
-      if (account?.provider !== "Credentials") return true;
+      if (account?.provider !== 'Credentials') return true;
 
       const existingUser = await getUserById(user.id);
 
       if (!existingUser?.emailVerified) return false;
+
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+
+        console.log({twoFactorConfirmation});
+
+        if (!twoFactorConfirmation) return false;
+
+        await prisma.twoFactorConfirmation.delete({
+          where: {id: twoFactorConfirmation.id},
+        });
+      }
 
       return true;
     },
