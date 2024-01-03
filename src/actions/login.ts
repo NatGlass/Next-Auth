@@ -1,11 +1,11 @@
 'use server';
 
-import {signIn} from '@/../auth';
 import {getUserByEmail} from '@/data/user';
 import {sendVerificationEmail} from '@/lib/email';
 import {generateVerificationToken} from '@/lib/tokens';
 import {LoginSchema, LoginSchemaType} from '@/schemas';
 import {AuthError} from 'next-auth';
+import {signIn} from '../../auth';
 import {DEFAULT_LOGIN_REDIRECT} from '../../routes';
 
 // eslint-disable-next-line import/prefer-default-export
