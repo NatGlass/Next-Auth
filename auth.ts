@@ -1,7 +1,9 @@
+/* eslint-disable no-param-reassign */
 import {getTwoFactorConfirmationByUserId} from '@/data/two-factor-confirmation';
 import {getUserById} from '@/data/user';
 import prisma from '@/lib/db';
 import {PrismaAdapter} from '@auth/prisma-adapter';
+import {UserRole} from '@prisma/client';
 import NextAuth from 'next-auth';
 import authConfig from './auth.config';
 
@@ -54,8 +56,12 @@ export const {
       }
 
       if (token.role && session.user) {
-        // eslint-disable-next-line no-param-reassign
-        session.user.role = token.role as 'ADMIN' | 'USER';
+        session.user.role = token.role as UserRole;
+      }
+
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email;
       }
 
       return session;
@@ -67,8 +73,12 @@ export const {
 
       if (!existingUser) return token;
 
-      // eslint-disable-next-line no-param-reassign
+      // Allow updating the user's name and email
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+
       token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token;
     },
