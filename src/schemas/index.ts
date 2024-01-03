@@ -24,3 +24,11 @@ export const RegisterSchema = z.object({
 });
 
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>;
+
+export const ResetSchema = z.object({
+  email: z.string().email({
+    message: 'Please enter a valid email address',
+  }),
+});
+
+export type ResetSchemaType = z.infer<typeof ResetSchema>;
