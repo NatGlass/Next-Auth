@@ -1,7 +1,9 @@
 'use server';
 
 import {getUserByEmail} from '@/data/user';
-import {ResetSchema, ResetSchemaType} from '@/schemas';
+import { ResetSchema, ResetSchemaType } from '@/schemas';
+import { sendPasswordResetEmail } from '@/lib/email';
+import { generatePasswordResetToken } from '@/lib/tokens';
 
 export async function reset(values: ResetSchemaType) {
   const validatedValues = ResetSchema.safeParse(values);
@@ -18,7 +20,9 @@ export async function reset(values: ResetSchemaType) {
     return {error: 'Account does not exist. Please sign up.'};
   }
 
-  // TODO: Send reset email
+  const passwordResetToken = await generatePasswordResetToken(email);
+
+  await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token);
 
   return {success: 'Reset email sent'};
 }
