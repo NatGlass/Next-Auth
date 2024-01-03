@@ -2,6 +2,15 @@ import {Resend} from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+export const sendTwoFactorEmail = async (email: string, token: string) => { 
+  await resend.emails.send({
+    from: 'nat@visibyte.dev',
+    to: email,
+    subject: '2FA code',
+    html: `<p>Your 2FA code is: ${token}</p>`,
+  });
+}
+
 export async function sendPasswordResetEmail(email: string, token: string) {
   const resetLink = `http://localhost:3000/auth/new-password?token=${token}`;
 
