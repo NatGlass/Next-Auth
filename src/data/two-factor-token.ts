@@ -1,14 +1,14 @@
-import prisma from "@/lib/db";
+import prisma from '@/lib/db';
 
 export async function getTwoFactorTokenByToken(token: string) {
   try {
-      const twoFactorToken = await prisma.twoFactorToken.findUnique({
-          where: { token }
-      });
+    const twoFactorToken = await prisma.twoFactorToken.findUnique({
+      where: {token},
+    });
 
-      return twoFactorToken
+    return twoFactorToken;
   } catch (error) {
-      return null;
+    return null;
   }
 }
 
