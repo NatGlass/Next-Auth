@@ -7,6 +7,7 @@ export const LoginSchema = z.object({
   password: z.string().min(1, {
     message: 'Please enter your password',
   }),
+  code: z.optional(z.string())
 });
 
 export type LoginSchemaType = z.infer<typeof LoginSchema>;
