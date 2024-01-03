@@ -7,7 +7,7 @@ export async function getTwoFactorConfirmationByUserId(userId: string) {
     });
 
     return twoFactorConfirmation;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
