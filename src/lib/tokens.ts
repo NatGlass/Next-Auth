@@ -7,7 +7,7 @@ import prisma from './db';
 
 export async function generateTwoFactorToken(email: string) {
   const token = crypto.randomInt(100_000, 1_000_000).toString();
-  const expires = new Date(new Date().getTime() + 3600 * 1000); // 1 hour from now
+  const expires = new Date(new Date().getTime() + 5 * 60 * 1000); // 5 minutes from now
 
   const existingToken = await getTwoFactorTokenByEmail(email);
 
@@ -32,7 +32,7 @@ export async function generateTwoFactorToken(email: string) {
 
 export async function generatePasswordResetToken(email: string) {
   const token = uuidv4();
-  const expires = new Date(new Date().getTime() + 3600 * 1000); // 1 hour from now
+  const expires = new Date(new Date().getTime() + 5 * 60 * 1000); // 5 minutes from now
 
   const existingToken = await getPasswordResetTokenByEmail(email);
 
@@ -57,7 +57,7 @@ export async function generatePasswordResetToken(email: string) {
 
 export async function generateVerificationToken(email: string) {
   const token = uuidv4();
-  const expires = new Date(new Date().getTime() + 3600 * 1000); // 1 hour from now
+  const expires = new Date(new Date().getTime() + 5 * 60 * 1000); // 5 minutes from now
 
   const existingToken = await getVerificationTokenByEmail(email);
 
