@@ -8,6 +8,7 @@ import {Button} from '@/components/ui/button';
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
 import {LoginSchema, LoginSchemaType} from '@/schemas';
+import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 import {useState, useTransition} from 'react';
 import FormError from '../form-error';
@@ -16,7 +17,10 @@ import CardWrapper from './card-wrapper';
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? "Please login with the auth provider you used to sign up with." : "";
+  const urlError =
+    searchParams.get('error') === 'OAuthAccountNotLinked'
+      ? 'Please login with the auth provider you used to sign up with.'
+      : '';
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
@@ -80,6 +84,10 @@ function LoginForm() {
                   <FormControl>
                     <Input {...field} placeholder="******" type="password" disabled={isPending} />
                   </FormControl>
+
+                  <Button variant="link" className="px-0 font-normal" size="sm" asChild>
+                    <Link href="/auth/reset">Forgot password?</Link>
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
